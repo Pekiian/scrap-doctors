@@ -39,10 +39,10 @@ app.get('/getDoctor/:dni', async function (req, res) {
     const value = await openWebPage(dni)
 
     if(!value){
-        res.sendStatus(404)
+        res.send(404)
     }
 
-    res.sendStatus(204)
+    res.send(204)
 })
  
 app.listen(PORT, function (err) {
