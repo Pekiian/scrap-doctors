@@ -5,7 +5,16 @@ const puppeteer = require('puppeteer')
 
 async function openWebPage(dni) {
     const browser = await puppeteer.launch({
-        headless: 'new'
+        args: [
+              "--disable-setuid-sandbox",
+              "--no-sandbox",
+              "--single-process",
+              "--no-zygote",
+            ],
+            executablePath:
+              process.env.NODE_ENV === "production"
+                ? process.env.PUPPETEER_EXECUTABLE_PATH
+                : puppeteer.executablePath(),
     });
     const page = await browser.newPage();
     await page.goto("https://sisa.msal.gov.ar/sisa/");
@@ -20,6 +29,10 @@ async function openWebPage(dni) {
 
     return value
 }
+
+app.get("/", (req, res) => {
+    res.send("Render Puppeteer server is up and running!");
+});
 
 app.get('/getDoctor/:dni', async function (req, res) {
     const { dni } = req.params
